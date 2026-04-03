@@ -1,4 +1,4 @@
-Copyright (c) 2026 Kevin Sanchez
+Copyright (c) 2026 KEBESA, SLU
 
 All rights reserved.
 
