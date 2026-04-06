@@ -1,0 +1,29 @@
+{
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "search": "Buscar",
+    "actions": "Acciones",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "clear": "Limpiar"
+  },
+  "users": {
+    "title": "Usuarios",
+    "addUser": "Agregar usuario",
+    "email": "Email",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "username": "Usuario",
+    "password": "Contraseña",
+    "changePassword": "Cambiar contraseña",
+    "userId": "ID Usuario",
+    "editUser": "Editar usuario",
+    "deleteTitle": "Eliminar usuario",
+    "deleteConfirm": "¿Seguro que quieres eliminar {{email}}?"
+  },
+  "errors": {
+    "USER_ALREADY_EXISTS": "Este email ya está registrado",
+    "USER_CREATION_FAILED": "Este usuario ya existe"
+  }
+}

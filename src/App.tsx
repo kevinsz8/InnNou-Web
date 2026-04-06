@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { appRoutes } from './routes/appRoutes';
 import { AuthProvider } from './core/auth/authContext';
 import { Toaster } from 'react-hot-toast'; 
-import Loader from './components/ui/Loader';
+import './i18n';
 
 function App() {
     return (

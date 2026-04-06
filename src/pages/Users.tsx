@@ -12,7 +12,7 @@ import { createUserSchema, updateUserSchema } from "@/types/validation/userSchem
 import Loader from "@/components/ui/Loader";
 import type { User } from "@/types/user";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
-import { showGlobalErrorModal } from "../core/auth/errorModalService";
+import { useTranslation } from "react-i18next";
 
 const searchOptions = [
     { value: "email", label: "Email" },
@@ -21,6 +21,8 @@ const searchOptions = [
 ];
 
 const Users: React.FC = () => {
+    const { t } = useTranslation();
+
     const [mode, setMode] = useState<"create" | "edit">("create");
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [changePassword, setChangePassword] = useState(false);
@@ -163,22 +165,20 @@ const Users: React.FC = () => {
             });
 
             if (!res.success) {
-                const firstError = res.errors?.[0];
+                const error = res.errors?.[0];
 
-                if (firstError?.code === "USER_ALREADY_EXISTS") {
+                if (error?.code === "USER_ALREADY_EXISTS") {
                     setFormErrors(prev => ({
                         ...prev,
-                        email: firstError.description
+                        email: t("errors.USER_ALREADY_EXISTS")
                     }));
-                    return;
                 }
 
-                if (firstError?.code === "USER_CREATION_FAILED") {
+                if (error?.code === "USER_CREATION_FAILED") {
                     setFormErrors(prev => ({
                         ...prev,
-                        userName: firstError.description
+                        userName: t("errors.USER_CREATION_FAILED")
                     }));
-                    return;
                 }
 
                 return;
@@ -227,12 +227,12 @@ const Users: React.FC = () => {
 
     // 📊 TABLE COLUMNS
     const columns = [
-        { key: "userId", label: "User ID" },
-        { key: "email", label: "Email" },
-        { key: "firstName", label: "First Name" },
-        { key: "lastName", label: "Last Name" },
-        { key: "userName", label: "User Name" },
-        { key: "actions", label: "Actions" },
+        { key: "userId", label: t("users.userId") },
+        { key: "email", label: t("users.email") },
+        { key: "firstName", label: t("users.firstName") },
+        { key: "lastName", label: t("users.lastName") },
+        { key: "userName", label: t("users.username") },
+        { key: "actions", label: t("common.actions") },
     ];
 
     return (
@@ -250,11 +250,9 @@ const Users: React.FC = () => {
                             value={searchType}
                             onChange={e => setSearchType(e.target.value)}
                         >
-                            {searchOptions.map(opt => (
-                                <option key={opt.value} value={opt.value}>
-                                    {opt.label}
-                                </option>
-                            ))}
+                            <option value="email">{t("users.email")}</option>
+                            <option value="firstName">{t("users.firstName")}</option>
+                            <option value="lastName">{t("users.lastName")}</option>
                         </select>
                     </div>
 
@@ -263,14 +261,12 @@ const Users: React.FC = () => {
                             type="text"
                             value={searchValue}
                             onChange={e => setSearchValue(e.target.value)}
-                            placeholder="Search..."
+                            placeholder={t("common.search") + "..."}
                         />
                     </div>
 
-                    <Button type="submit">Search</Button>
-                    <Button type="button" onClick={handleClearSearch}>
-                        Clear
-                    </Button>
+                    <Button type="submit">{t("common.search")}</Button>
+                    <Button type="button" onClick={handleClearSearch}>{t("common.clear")}</Button>
                 </form>
 
                 {/* ➕ ADD USER */}
@@ -281,7 +277,7 @@ const Users: React.FC = () => {
                     }}
                     className="mb-4"
                 >
-                    + Add User
+                    + {t("users.addUser")}
                 </Button>
 
                 {/* 📊 TABLE */}
@@ -309,7 +305,7 @@ const Users: React.FC = () => {
                                         className="px-2 py-1 text-sm"
                                         onClick={() => handleEdit(user)}
                                     >
-                                        Edit
+                                        {t("common.edit")}
                                     </Button>
 
                                     <Button
@@ -317,7 +313,7 @@ const Users: React.FC = () => {
                                         className="px-2 py-1 text-sm"
                                         onClick={() => handleDelete(user)}
                                     >
-                                        Delete
+                                        {t("common.delete")}
                                     </Button>
 
                                 </div>
@@ -334,7 +330,7 @@ const Users: React.FC = () => {
                     }}
                 >
                     <h2 className="text-xl font-bold mb-4">
-                        {mode === "create" ? "Add User" : "Edit User"}
+                        {mode === "create" ? t("users.addUser") : t("users.editUser")}
                     </h2>
                     <div>
                         <form onSubmit={handleAddUser} className="flex flex-col gap-4">
@@ -345,7 +341,7 @@ const Users: React.FC = () => {
                                     setAddFirstName(e.target.value);
                                     clearFieldError("firstName");
                                 }}
-                                placeholder="First Name"
+                                placeholder={t("users.firstName")}
                                 error={formErrors.firstName}
                                 disabled={saving || updating}
                             />
@@ -356,7 +352,7 @@ const Users: React.FC = () => {
                                     setAddLastName(e.target.value);
                                     clearFieldError("lastName");
                                 }}
-                                placeholder="Last Name"
+                                placeholder={t("users.lastName")}
                                 error={formErrors.lastName}
                                 disabled={saving || updating}
                             />
@@ -367,7 +363,7 @@ const Users: React.FC = () => {
                                     setAddEmail(e.target.value);
                                     clearFieldError("email");
                                 }}
-                                placeholder="Email"
+                                placeholder={t("users.email")}
                                 error={formErrors.email}
                                 disabled={saving || updating}
                             />
@@ -378,7 +374,7 @@ const Users: React.FC = () => {
                                     setAddUserName(e.target.value);
                                     clearFieldError("userName");
                                 }}
-                                placeholder="UserName"
+                                placeholder={t("users.username")}
                                 error={formErrors.userName}
                                 disabled={saving || updating}
                             />
@@ -397,7 +393,7 @@ const Users: React.FC = () => {
                                         disabled={saving || updating}
                                     />
                                     <label className="text-sm text-slate-600">
-                                        Change Password
+                                        {t("users.changePassword")}
                                     </label>
                                 </div>
                             )}
@@ -408,7 +404,7 @@ const Users: React.FC = () => {
                                     setAddPassword(e.target.value);
                                     clearFieldError("password");
                                 }}
-                                placeholder="Password"
+                                placeholder={t("users.password")}
                                 type="password"
                                 error={formErrors.password}
                                 disabled={
@@ -422,11 +418,11 @@ const Users: React.FC = () => {
 
                             <div className="flex justify-end gap-2">
                                 <Button type="submit" loading={saving} disabled={saving || updating}>
-                                    Save
+                                    {t("common.save")}
                                 </Button>
 
                                 <Button type="button" onClick={() => setShowAddModal(false)} disabled={saving || updating}>
-                                    Cancel
+                                    {t("common.save")}
                                 </Button>
                             </div>
                         </form>
@@ -436,10 +432,10 @@ const Users: React.FC = () => {
 
                 <ConfirmDialog
                     open={!!deleteUser}
-                    title="Delete user"
-                    description={`Are you sure you want to delete ${deleteUser?.email}?`}
-                    confirmText="Delete"
-                    cancelText="Cancel"
+                    title={t("users.deleteTitle")}
+                    description={t("users.deleteConfirm", { email: deleteUser?.email })}
+                    confirmText={t("common.delete")}
+                    cancelText={t("common.cancel")}
                     loading={deleting}
                     onConfirm={confirmDelete}
                     onCancel={cancelDelete}

@@ -1,0 +1,29 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "search": "Search",
+    "actions": "Actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "clear": "Clear"
+  },
+  "users": {
+    "title": "Users",
+    "addUser": "Add User",
+    "email": "Email",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "username": "Username",
+    "password": "Password",
+    "changePassword": "Change Password",
+    "userId": "User ID",
+    "editUser": "Edit User",
+    "deleteTitle": "Delete user",
+    "deleteConfirm": "Are you sure you want to delete {{email}}?"
+  },
+  "errors": {
+    "USER_ALREADY_EXISTS": "This email is already registered",
+    "USER_CREATION_FAILED": "Username already exists"
+  }
+}

@@ -5,6 +5,7 @@ interface LoginResponse {
     refreshToken: string;
     email: string;
     userId: string;
+    userToken: string;
 }
 
 export async function loginApi(email: string, password: string): Promise<ApiResponse<LoginResponse>> {

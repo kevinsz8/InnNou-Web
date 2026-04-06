@@ -1,0 +1,31 @@
+{
+  "common": {
+    "save": "Desar",
+    "cancel": "Cancel·lar",
+    "search": "Cercar",
+    "actions": "Accions",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "clear": "Netejar"
+  },
+  "users": {
+    "title": "Usuaris",
+    "addUser": "Afegir usuari",
+    "email": "Correu",
+    "firstName": "Nom",
+    "lastName": "Cognom",
+    "username": "Usuari",
+    "password": "Contrasenya",
+    "changePassword": "Canviar contrasenya",
+    "userId": "ID Usuari",
+    "editUser": "Editar usuari",
+    "deleteTitle": "Eliminar usuari",
+    "deleteConfirm": "Segur que vols eliminar {{email}}?"
+  },
+  "errors": {
+    "USER_EXISTS": "Aquest correu ja està registrat",
+    "USERNAME_EXISTS": "Aquest usuari ja existeix",
+    "USER_ALREADY_EXISTS": "Aquest correu ja està registrat",
+    "USER_CREATION_FAILED": "Aquest usuari ja existeix"
+  }
+}

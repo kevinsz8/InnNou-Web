@@ -23,9 +23,13 @@ export interface ApiOptions {
     body?: unknown;
     params?: Record<string, string | number>;
 
-    //  NUEVO
     errorMode?: ErrorMode;
 }
+
+const logoutAndRedirect = () => {
+    localStorage.clear();
+    window.location.href = "/";
+};
 
 export async function apiCall<T = unknown>(
     url: string,
@@ -45,16 +49,16 @@ export async function apiCall<T = unknown>(
             fullUrl += `?${query}`;
         }
 
-        const token = localStorage.getItem("authToken");
+        const token = localStorage.getItem('authToken');
 
         const fetchOptions: RequestInit = {
-            method: options.method || "GET",
+            method: options.method || 'GET',
             headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
                 ...(options.headers || {}),
                 ...(token ? { Authorization: `Bearer ${token}` } : {})
             },
-            body: options.body ? JSON.stringify(options.body) : undefined
+            body: options.body ? JSON.stringify(options.body) : undefined,
         };
 
         const response = await fetch(fullUrl, fetchOptions);
@@ -67,7 +71,7 @@ export async function apiCall<T = unknown>(
             throw new Error("Invalid JSON response");
         }
 
-        //  TOKEN EXPIRED → REFRESH
+        // TOKEN EXPIRED  REFRESH FLOW
         if (response.status === 401 && retry) {
 
             if (!isRefreshing) {
@@ -76,7 +80,7 @@ export async function apiCall<T = unknown>(
                 const refreshToken = localStorage.getItem("refreshToken");
 
                 if (!refreshToken) {
-                    window.location.href = "/";
+                    logoutAndRedirect();
                     return Promise.reject();
                 }
 
@@ -90,14 +94,14 @@ export async function apiCall<T = unknown>(
 
                     processQueue();
                 } catch {
-                    localStorage.clear();
-                    window.location.href = "/";
+                    logoutAndRedirect();
                     return Promise.reject();
                 } finally {
                     isRefreshing = false;
                 }
             }
 
+            // WAIT UNTIL REFRESH DONE
             return new Promise((resolve) => {
                 pendingRequests.push(async () => {
                     const result = await apiCall<T>(url, options, false);
@@ -106,26 +110,19 @@ export async function apiCall<T = unknown>(
             });
         }
 
-        //  ERROR RESPONSE
         if (!response.ok || data.success === false) {
-            const errors = handleApiError(data, errorMode);
-
-            return {
-                ...data,
-                success: false,
-                errors
-            };
+            handleApiError(data, errorMode);
         }
 
         return data;
 
     } catch (error) {
-        const errors = handleApiError(error, errorMode);
+        handleApiError(error, errorMode);
 
         return {
             returnData: null as any,
             success: false,
-            errors
+            errors: [{ code: "UNEXPECTED", description: "Unexpected error" }]
         };
     }
 }

@@ -51,21 +51,23 @@ export interface UpdateUserRequest {
     userName: string;
 }
 
+const BASE_URL = "https://localhost:7279/users";
+
 export async function updateUser(data: UpdateUserRequest) {
-    return apiCall('https://localhost:7279/users/edit', {
+    return apiCall(`${BASE_URL}/editUser`, {
         method: 'POST',
         body: data
     });
 }
 
 export async function deleteUser(userId: string) {
-    return apiCall('https://localhost:7279/users/delete', {
+    return apiCall(`${BASE_URL}/deleteUser`, {
         method: 'POST',
         body: { userId }
     });
 }
 
-const BASE_URL = "https://localhost:7279";
+
 
 //  GET USERS
 export async function getUsers(
@@ -84,7 +86,7 @@ export async function getUsers(
 export async function createUser(
     data: CreateUserRequest
 ): Promise<ApiResponse<CreateUserResponse>> {
-    return apiCall<CreateUserResponse>(`${BASE_URL}/users`, {
+    return apiCall<CreateUserResponse>(`${BASE_URL}/createUser`, {
         method: 'POST',
         headers: {
             accept: 'application/json'

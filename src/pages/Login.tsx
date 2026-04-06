@@ -64,7 +64,7 @@ const Login: React.FC = () => {
                 {/* FORM */}
                 <div className="w-full md:w-1/2 p-12 flex flex-col justify-center h-full">
                     <h1 className="text-2xl font-bold text-slate-800 mb-2 text-center">
-                        Sign in to SaaS
+                        Sign in to InnNou
                     </h1>
 
                     <p className="text-slate-500 mb-6 text-center">
