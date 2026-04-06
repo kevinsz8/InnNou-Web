@@ -50,6 +50,10 @@ yarn-error.log*
 # IDEs
 #######################################
 
+.vs/
+*.sqlite
+*.db
+*.cache
 .vscode/
 .idea/
 
