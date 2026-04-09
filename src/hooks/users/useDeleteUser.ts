@@ -5,11 +5,11 @@ import toast from "react-hot-toast";
 export const useDeleteUser = (onSuccess?: () => void) => {
     const [deleting, setDeleting] = useState(false);
 
-    const remove = async (userId: string) => {
+    const remove = async (userToken: string) => {
         setDeleting(true);
 
         try {
-            const res = await deleteUser(userId);
+            const res = await deleteUser(userToken);
 
             if (res.success) {
                 toast.success("User deleted 🗑️");

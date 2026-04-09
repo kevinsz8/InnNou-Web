@@ -1,3 +1,4 @@
+import { forceLogout } from "./authSession";
 import { handleApiError, type ErrorMode, type ApiError } from "./errorHandler";
 import { refreshTokenApi } from "@/services/authService";
 
@@ -10,10 +11,20 @@ export interface ApiResponse<T> {
 }
 
 let isRefreshing = false;
-let pendingRequests: (() => void)[] = [];
+let pendingRequests: Array<{
+    resolve: (value: any) => void;
+    reject: (reason?: any) => void;
+}> = [];
 
-const processQueue = () => {
-    pendingRequests.forEach(cb => cb());
+const processQueue = (error?: unknown) => {
+    pendingRequests.forEach(({ resolve, reject }) => {
+        if (error) {
+            reject(error);
+        } else {
+            resolve(null);
+        }
+    });
+
     pendingRequests = [];
 };
 
@@ -26,10 +37,6 @@ export interface ApiOptions {
     errorMode?: ErrorMode;
 }
 
-const logoutAndRedirect = () => {
-    localStorage.clear();
-    window.location.href = "/";
-};
 
 export async function apiCall<T = unknown>(
     url: string,
@@ -72,43 +79,51 @@ export async function apiCall<T = unknown>(
         }
 
         // TOKEN EXPIRED  REFRESH FLOW
-        if (response.status === 401 && retry) {
+        if (response.status === 401) {
 
-            if (!isRefreshing) {
-                isRefreshing = true;
-
-                const refreshToken = localStorage.getItem("refreshToken");
-
-                if (!refreshToken) {
-                    logoutAndRedirect();
-                    return Promise.reject();
-                }
-
-                try {
-                    const refreshRes = await refreshTokenApi(refreshToken);
-
-                    if (!refreshRes.success) throw new Error();
-
-                    localStorage.setItem("authToken", refreshRes.returnData.token);
-                    localStorage.setItem("refreshToken", refreshRes.returnData.refreshToken);
-
-                    processQueue();
-                } catch {
-                    logoutAndRedirect();
-                    return Promise.reject();
-                } finally {
-                    isRefreshing = false;
-                }
+            if (!retry) {
+                forceLogout();
+                return Promise.reject(new Error("Session expired"));
             }
 
-            // WAIT UNTIL REFRESH DONE
-            return new Promise((resolve) => {
-                pendingRequests.push(async () => {
-                    const result = await apiCall<T>(url, options, false);
-                    resolve(result);
-                });
-            });
+            const refreshToken = localStorage.getItem("refreshToken");
+
+            if (!refreshToken) {
+                forceLogout();
+                return Promise.reject(new Error("Session expired"));
+            }
+
+            if (isRefreshing) {
+                return new Promise((resolve, reject) => {
+                    pendingRequests.push({ resolve, reject });
+                }).then(() => apiCall<T>(url, options, false));
+            }
+
+            isRefreshing = true;
+
+            try {
+                const refreshRes = await refreshTokenApi(refreshToken);
+
+                if (!refreshRes.success || !refreshRes.returnData?.token) {
+                    throw new Error("Refresh token failed");
+                }
+
+                localStorage.setItem("authToken", refreshRes.returnData.token);
+                localStorage.setItem("refreshToken", refreshRes.returnData.refreshToken);
+
+                processQueue();
+
+                return await apiCall<T>(url, options, false);
+
+            } catch (refreshError) {
+                processQueue(refreshError);
+                forceLogout();
+                return Promise.reject(refreshError);
+            } finally {
+                isRefreshing = false;
+            }
         }
+
 
         if (!response.ok || data.success === false) {
             handleApiError(data, errorMode);

@@ -60,10 +60,10 @@ export async function updateUser(data: UpdateUserRequest) {
     });
 }
 
-export async function deleteUser(userId: string) {
+export async function deleteUser(userToken: string) {
     return apiCall(`${BASE_URL}/deleteUser`, {
         method: 'POST',
-        body: { userId }
+        body: { userToken }
     });
 }
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@/components/ui/Button";
 import Loader from "./Loader";
 
@@ -23,7 +23,8 @@ interface PaginatedTableProps<T> {
 
     pagination: Pagination;
     onPageChange: (page: number) => void;
-
+    onRowClick?: (item: T) => void;
+    onRowDoubleClick?: (item: T) => void;
     loading?: boolean;
     initialLoading?: boolean;
 }
@@ -36,7 +37,11 @@ function PaginatedTable<T>({
     onPageChange,
     loading = false,
     initialLoading = false,
+    onRowClick,
+    onRowDoubleClick
 }: PaginatedTableProps<T>) {
+
+    const [selectedRow, setSelectedRow] = useState<number | null>(null);
 
     const {
         pageNumber,
@@ -47,7 +52,7 @@ function PaginatedTable<T>({
         nextPageNumber
     } = pagination;
 
-    // 🔥 Skeleton rows (initial load)
+    // 🔥 Skeleton
     const SkeletonRows = () => (
         <>
             {[...Array(5)].map((_, i) => (
@@ -62,15 +67,12 @@ function PaginatedTable<T>({
         </>
     );
 
-    // 🔥 Pagination logic with ellipsis
+    // 🔥 Pagination logic
     function getVisiblePages(current: number, total: number, delta = 1) {
         const pages: (number | string)[] = [];
 
-        // Caso simple: pocas páginas → mostrar todas
         if (total <= 7) {
-            for (let i = 1; i <= total; i++) {
-                pages.push(i);
-            }
+            for (let i = 1; i <= total; i++) pages.push(i);
             return pages;
         }
 
@@ -79,99 +81,107 @@ function PaginatedTable<T>({
 
         pages.push(1);
 
-        // Si hay gap entre 1 y left → elipsis
-        if (left > 2) {
-            pages.push("...");
-        }
+        if (left > 2) pages.push("...");
 
-        // Páginas centrales (sin duplicar 1 ni total)
-        for (let i = left; i <= right; i++) {
-            pages.push(i);
-        }
+        for (let i = left; i <= right; i++) pages.push(i);
 
-        // Si hay gap entre right y total → elipsis
-        if (right < total - 1) {
-            pages.push("...");
-        }
+        if (right < total - 1) pages.push("...");
 
         pages.push(total);
 
         return pages;
     }
 
-    const pages = getVisiblePages(pageNumber, totalPages,1);
+    const pages = getVisiblePages(pageNumber, totalPages);
 
     return (
-        <div>
-            {/* TABLE */}
-            <div className="relative border min-h-[350px] overflow-hidden rounded-xl">
+        <div className="w-full">
 
-                <table className="w-full text-sm">
-                    <thead className="bg-slate-100">
-                        <tr>
-                            {columns.map(col => (
-                                <th
-                                    key={col.key}
-                                    className="text-left px-4 py-2 font-medium text-slate-700"
-                                >
-                                    {col.label}
-                                </th>
-                            ))}
-                        </tr>
-                    </thead>
+            {/* 🔥 SCROLL WRAPPER */}
+            <div className="w-full overflow-x-auto">
 
-                    <tbody className={loading ? "opacity-60 transition-opacity" : ""}>
-                        {initialLoading ? (
-                            <SkeletonRows />
-                        ) : data.length === 0 ? (
-                            <tr>
-                                <td
-                                    colSpan={columns.length}
-                                    className="text-center py-6 text-slate-400"
-                                >
-                                    No data found
-                                </td>
-                            </tr>
-                        ) : (
-                            data.map((item, index) => (
-                                <React.Fragment key={index}>
-                                    {renderRow(item)}
-                                </React.Fragment>
-                            ))
+                <div className="min-w-[700px]">
+
+                    <div className="relative border">
+
+                        <table className="w-full text-sm">
+
+                            <thead className="bg-slate-100">
+                                <tr>
+                                    {columns.map(col => (
+                                        <th
+                                            key={col.key}
+                                            className="text-left px-4 py-2 font-medium text-slate-700 whitespace-nowrap"
+                                        >
+                                            {col.label}
+                                        </th>
+                                    ))}
+                                </tr>
+                            </thead>
+
+                            <tbody className={loading ? "opacity-60" : ""}>
+                                {initialLoading ? (
+                                    <SkeletonRows />
+                                ) : data.length === 0 ? (
+                                    <tr>
+                                        <td colSpan={columns.length} className="text-center py-6 text-slate-400">
+                                            No data found
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    data.map((item, index) => {
+                                        const isSelected = selectedRow === index;
+
+                                        return (
+                                            <tr
+                                                key={index}
+                                                onClick={() => {
+                                                    setSelectedRow(index);
+                                                    onRowClick?.(item);
+                                                }}
+                                                onDoubleClick={() => onRowDoubleClick?.(item)}
+                                                className={`"border-t hover:bg-slate-100 cursor-pointer transition
+                        ${isSelected
+                                                        ? "bg-blue-100"
+                                                        : "hover:bg-slate-100"}
+                    `}
+                                            >
+                                                {renderRow(item)}
+                                            </tr>
+                                        );
+                                    })
+                                )}
+                            </tbody>
+
+                        </table>
+
+                        {/* LOADER */}
+                        {loading && !initialLoading && (
+                            <div className="absolute inset-0 flex items-center justify-center bg-white/50 backdrop-blur-sm">
+                                <Loader size={8} />
+                            </div>
                         )}
-                    </tbody>
-                </table>
 
-                {/* 🔥 OVERLAY LOADER */}
-                {loading && !initialLoading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-white/40 backdrop-blur-[1px] pointer-events-none">
-                        <Loader size={8} />
                     </div>
-                )}
+
+                </div>
+
             </div>
 
             {/* PAGINATION */}
-            <div className="flex justify-center mt-4 gap-2 flex-wrap items-center">
+            <div className="flex flex-wrap justify-center mt-4 gap-2 items-center">
 
-                {/* PREVIOUS */}
                 {hasPreviousPage && (
-                    <Button
-                        onClick={() => onPageChange(previousPageNumber)}
-                        disabled={loading}
-                    >
+                    <Button onClick={() => onPageChange(previousPageNumber)} disabled={loading}>
                         Previous
                     </Button>
                 )}
 
-                {/* PAGE NUMBERS */}
                 {pages.map((page, index) => {
 
                     if (page === "...") {
                         return (
-                            <span
-                                key={`ellipsis-${index}`}
-                                className="px-2 py-2 text-slate-400"
-                            >
+                            <span key={`ellipsis-${index}`} className="px-2 py-2 text-slate-400">
                                 ...
                             </span>
                         );
@@ -180,12 +190,11 @@ function PaginatedTable<T>({
                     return (
                         <Button
                             key={page}
-                            type="button"
                             onClick={() => pageNumber !== page && onPageChange(page as number)}
                             disabled={pageNumber === page || loading}
-                            className={`min-w-[40px] text-center px-3 py-2 rounded transition
+                            className={`min-w-[40px]
                                 ${pageNumber === page
-                                    ? "bg-slate-900 text-white cursor-default shadow-inner"
+                                    ? "bg-slate-900 text-white"
                                     : "bg-slate-200 hover:bg-slate-300"}
                             `}
                         >
@@ -194,16 +203,13 @@ function PaginatedTable<T>({
                     );
                 })}
 
-                {/* NEXT */}
                 {hasNextPage && (
-                    <Button
-                        onClick={() => onPageChange(nextPageNumber)}
-                        disabled={loading}
-                    >
+                    <Button onClick={() => onPageChange(nextPageNumber)} disabled={loading}>
                         Next
                     </Button>
                 )}
             </div>
+
         </div>
     );
 }

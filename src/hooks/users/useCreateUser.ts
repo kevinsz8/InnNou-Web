@@ -13,6 +13,8 @@ export const useCreateUser = (onSuccess?: () => void) => {
         firstName: string;
         lastName: string;
         username: string;
+        roleId?: number | null;
+        hotelId?: number | null;
     }): Promise<ApiResponse<CreateUserResponse>> => {
         setSaving(true);
 
