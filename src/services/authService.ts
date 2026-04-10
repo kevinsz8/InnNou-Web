@@ -8,8 +8,22 @@ interface LoginResponse {
     userToken: string;
 }
 
+export interface ImpersonateRequest {
+    targetUserToken: string;
+}
+
+export interface ImpersonateResponse {
+    token: string;
+    refreshToken: string;
+    userToken: string;
+    email: string;
+    isImpersonating: boolean;
+}
+
+const BASE_URL = "https://localhost:7279/auth";
+
 export async function loginApi(email: string, password: string): Promise<ApiResponse<LoginResponse>> {
-    return apiCall<LoginResponse>('https://localhost:7279/auth/login', {
+    return apiCall<LoginResponse>(`${BASE_URL}/login`, {
         method: 'POST',
         body: { email, password },
         headers: { accept: 'application/json' },
@@ -19,10 +33,20 @@ export async function loginApi(email: string, password: string): Promise<ApiResp
 
 export async function refreshTokenApi(refreshToken: string) {
     return apiCall<{ token: string; refreshToken: string }>(
-        'https://localhost:7279/auth/refresh',
+        `${ BASE_URL }/refresh`,
         {
             method: 'POST',
             body: { refreshToken },
         }
     );
+}
+
+// Impersonate
+export async function impersonateUser(
+    data: ImpersonateRequest
+): Promise<ApiResponse<ImpersonateResponse>> {
+    return apiCall<ImpersonateResponse>(`${BASE_URL}/impersonate`, {
+        method: "POST",
+        body: data
+    });
 }

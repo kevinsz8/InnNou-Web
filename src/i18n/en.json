@@ -1,4 +1,33 @@
 {
+  "auth": {
+    "loginFailed": "Login failed",
+    "signInTitle": "Sign in to InnNou",
+    "welcomeBack": "Welcome back! Please enter your credentials.",
+    "email": "Email",
+    "password": "Password",
+    "login": "Login"
+  },
+  "layout": {
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout",
+    "role": "Role",
+    "hotel": "Hotel",
+    "switchHotel": "Switch hotel",
+    "impersonating": "Impersonating user",
+    "returnToOwnSession": "Return to my session"
+  },
+  "menu": {
+    "home": "Home",
+    "invoices": "Invoices",
+    "providers": "Providers",
+    "articles": "Articles",
+    "prices": "Prices",
+    "users": "Users",
+    "sales": "Sales",
+    "inventory": "Inventory"
+  },
   "common": {
     "save": "Save",
     "cancel": "Cancel",
@@ -6,7 +35,8 @@
     "actions": "Actions",
     "edit": "Edit",
     "delete": "Delete",
-    "clear": "Clear"
+    "clear": "Clear",
+    "impersonate": "Impersonate"
   },
   "users": {
     "title": "Users",
@@ -20,7 +50,27 @@
     "userId": "User ID",
     "editUser": "Edit User",
     "deleteTitle": "Delete user",
-    "deleteConfirm": "Are you sure you want to delete {{email}}?"
+    "deleteConfirm": "Are you sure you want to delete {{email}}?",
+    "created": "User created",
+    "updated": "User updated",
+    "updateFailed": "Update failed",
+    "deleted": "User deleted",
+    "deleteFailed": "Delete failed",
+    "validation": {
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "emailInvalid": "Invalid email",
+      "usernameRequired": "Username is required",
+
+      "passwordMin": "At least 8 characters",
+      "passwordUpper": "Must include uppercase letter",
+      "passwordLower": "Must include lowercase letter",
+      "passwordNumber": "Must include a number",
+      "passwordSpecial": "Must include a special character",
+      "passwordMinShort": "Minimum 5 characters",
+
+      "PasswordStrong": "Password is not strong enough"
+    }
   },
   "errors": {
     "USER_ALREADY_EXISTS": "This email is already registered",

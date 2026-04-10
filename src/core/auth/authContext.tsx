@@ -7,6 +7,7 @@ interface AuthContextType {
     logout: () => void;
     token: string | null;
     loading: boolean;
+    updateSession: (token: string, refreshToken: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -47,7 +48,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         navigate('/');
     };
 
-    const value = { isAuthenticated, login, logout, token, loading };
+    const updateSession = (tokenValue: string, refreshTokenValue: string) => {
+        setIsAuthenticated(true);
+        setToken(tokenValue);
+
+        localStorage.setItem("authToken", tokenValue);
+        localStorage.setItem("refreshToken", refreshTokenValue);
+    };
+
+    const value = { isAuthenticated, login, logout, token, loading, updateSession };
 
     return (
         <AuthContext.Provider value={value}>
@@ -61,3 +70,4 @@ export const useAuth = () => {
     if (!context) throw new Error('useAuth must be used inside AuthProvider');
     return context;
 };
+

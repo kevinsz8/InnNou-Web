@@ -1,4 +1,33 @@
 {
+  "auth": {
+    "loginFailed": "Error al iniciar sesión",
+    "signInTitle": "Iniciar sesión en InnNou",
+    "welcomeBack": "¡Bienvenido! Ingresa tus credenciales.",
+    "email": "Correo",
+    "password": "Contraseña",
+    "login": "Entrar"
+  },
+  "layout": {
+    "dashboard": "Dashboard",
+    "profile": "Perfil",
+    "settings": "Configuración",
+    "logout": "Cerrar sesión",
+    "role": "Rol",
+    "hotel": "Hotel",
+    "switchHotel": "Cambiar hotel",
+    "impersonating": "Suplantando usuario",
+    "returnToOwnSession": "Volver a mi sesión"
+  },
+  "menu": {
+    "home": "Inicio",
+    "invoices": "Facturas",
+    "providers": "Proveedores",
+    "articles": "Artículos",
+    "prices": "Precios",
+    "users": "Usuarios",
+    "sales": "Ventas",
+    "inventory": "Inventario"
+  },
   "common": {
     "save": "Guardar",
     "cancel": "Cancelar",
@@ -6,7 +35,8 @@
     "actions": "Acciones",
     "edit": "Editar",
     "delete": "Eliminar",
-    "clear": "Limpiar"
+    "clear": "Limpiar",
+    "impersonate": "Impersonar"
   },
   "users": {
     "title": "Usuarios",
@@ -20,7 +50,27 @@
     "userId": "ID Usuario",
     "editUser": "Editar usuario",
     "deleteTitle": "Eliminar usuario",
-    "deleteConfirm": "¿Seguro que quieres eliminar {{email}}?"
+    "deleteConfirm": "¿Seguro que quieres eliminar {{email}}?",
+    "created": "Usuario creado",
+    "updated": "Usuario actualizado",
+    "updateFailed": "Error al actualizar",
+    "deleted": "Usuario eliminado",
+    "deleteFailed": "Error al eliminar",
+    "validation": {
+      "firstNameRequired": "El nombre es obligatorio",
+      "lastNameRequired": "El apellido es obligatorio",
+      "emailInvalid": "Correo inválido",
+      "usernameRequired": "El usuario es obligatorio",
+
+      "passwordMin": "Mínimo 8 caracteres",
+      "passwordUpper": "Debe incluir mayúscula",
+      "passwordLower": "Debe incluir minúscula",
+      "passwordNumber": "Debe incluir un número",
+      "passwordSpecial": "Debe incluir un símbolo",
+      "passwordMinShort": "Mínimo 5 caracteres",
+
+      "PasswordStrong": "La contraseña no es lo suficientemente segura"
+    }
   },
   "errors": {
     "USER_ALREADY_EXISTS": "Este email ya está registrado",

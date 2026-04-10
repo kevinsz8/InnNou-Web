@@ -51,6 +51,7 @@ export interface UpdateUserRequest {
     userName: string;
 }
 
+
 const BASE_URL = "https://localhost:7279/users";
 
 export async function updateUser(data: UpdateUserRequest) {
@@ -95,4 +96,6 @@ export async function createUser(
         errorMode: "inline"
     });
 }
+
+
 

@@ -1,42 +1,46 @@
 import { z } from "zod";
 
-export const createUserSchema = z.object({
-    firstName: z.string().min(1, "First name is required"),
-    lastName: z.string().min(1, "Last name is required"),
-    email: z.string().email("Invalid email"),
-    userName: z.string().min(1, "Username is required"),
-    password: z.string()
-        .min(8, "At least 8 characters")
-        .regex(/[A-Z]/, "Must include uppercase letter")
-        .regex(/[a-z]/, "Must include lowercase letter")
-        .regex(/[0-9]/, "Must include a number")
-        .regex(/[^A-Za-z0-9]/, "Must include a special character"),
-});
+export const buildCreateUserSchema = (t: (key: string) => string) =>
+    z.object({
+        firstName: z.string().min(1, t("users.validation.firstNameRequired")),
+        lastName: z.string().min(1, t("users.validation.lastNameRequired")),
+        email: z.string().email(t("users.validation.emailInvalid")),
+        userName: z.string().min(1, t("users.validation.usernameRequired")),
+        password: z.string()
+            .min(8, t("users.validation.passwordMin"))
+            .regex(/[A-Z]/, t("users.validation.passwordUpper"))
+            .regex(/[a-z]/, t("users.validation.passwordLower"))
+            .regex(/[0-9]/, t("users.validation.passwordNumber"))
+            .regex(/[^A-Za-z0-9]/, t("users.validation.passwordSpecial")),
+    });
 
-export const updateUserSchema = z.object({
-    firstName: z.string().min(1, "First name is required"),
-    lastName: z.string().min(1, "Last name is required"),
-    email: z.string().email("Invalid email"),
-    userName: z.string().min(1, "Username is required"),
+export const buildUpdateUserSchema = (t: (key: string) => string) =>
+    z.object({
+        firstName: z.string().min(1, t("users.validation.firstNameRequired")),
+        lastName: z.string().min(1, t("users.validation.lastNameRequired")),
+        email: z.string().email(t("users.validation.emailInvalid")),
+        userName: z.string().min(1, t("users.validation.usernameRequired")),
 
-    password: z.string()
-        .min(8, "At least 8 characters")
-        .regex(/[A-Z]/, "Must include uppercase letter")
-        .regex(/[a-z]/, "Must include lowercase letter")
-        .regex(/[0-9]/, "Must include a number")
-        .regex(/[^A-Za-z0-9]/, "Must include a special character").optional(),
+        password: z.string()
+            .min(8, t("users.validation.passwordMin"))
+            .regex(/[A-Z]/, t("users.validation.passwordUpper"))
+            .regex(/[a-z]/, t("users.validation.passwordLower"))
+            .regex(/[0-9]/, t("users.validation.passwordNumber"))
+            .regex(/[^A-Za-z0-9]/, t("users.validation.passwordSpecial"))
+            .optional(),
 
-    changePassword: z.boolean()
-}).superRefine((data, ctx) => {
-    if (data.changePassword) {
-        if (!data.password || data.password.length < 5) {
-            ctx.addIssue({
-                path: ["password"],
-                code: z.ZodIssueCode.custom,
-                message: "Min 5 characters",
-            });
-        }
-    }
-});
+        changePassword: z.boolean()
+    })
+        .superRefine((data, ctx) => {
+            if (data.changePassword) {
+                if (!data.password || data.password.length < 5) {
+                    ctx.addIssue({
+                        path: ["password"],
+                        code: z.ZodIssueCode.custom,
+                        message: t("users.validation.passwordMinShort"),
+                    });
+                }
+            }
+        });
 
-export type CreateUserForm = z.infer<typeof createUserSchema>;
+//export type CreateUserForm = z.infer<typeof createUserSchema>;

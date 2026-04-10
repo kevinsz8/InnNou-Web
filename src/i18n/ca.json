@@ -1,4 +1,33 @@
 {
+  "auth": {
+    "loginFailed": "Error en iniciar sessió",
+    "signInTitle": "Inicia sessió a InnNou",
+    "welcomeBack": "Benvingut! Introdueix les teves credencials.",
+    "email": "Correu",
+    "password": "Contrasenya",
+    "login": "Entrar"
+  },
+  "layout": {
+    "dashboard": "Tauler",
+    "profile": "Perfil",
+    "settings": "Configuració",
+    "logout": "Tancar sessió",
+    "role": "Role",
+    "hotel": "Hotel",
+    "switchHotel": "Switch hotel",
+    "impersonating": "Impersonating user",
+    "returnToOwnSession": "Return to my session"
+  },
+  "menu": {
+    "home": "Inici",
+    "invoices": "Factures",
+    "providers": "Proveïdors",
+    "articles": "Articles",
+    "prices": "Preus",
+    "users": "Usuaris",
+    "sales": "Vendes",
+    "inventory": "Inventari"
+  },
   "common": {
     "save": "Desar",
     "cancel": "Cancel·lar",
@@ -6,7 +35,8 @@
     "actions": "Accions",
     "edit": "Editar",
     "delete": "Eliminar",
-    "clear": "Netejar"
+    "clear": "Netejar",
+    "impersonate": "Suplantar"
   },
   "users": {
     "title": "Usuaris",
@@ -20,7 +50,27 @@
     "userId": "ID Usuari",
     "editUser": "Editar usuari",
     "deleteTitle": "Eliminar usuari",
-    "deleteConfirm": "Segur que vols eliminar {{email}}?"
+    "deleteConfirm": "Segur que vols eliminar {{email}}?",
+    "created": "Usuari creat",
+    "updated": "Usuari actualitzat",
+    "updateFailed": "Error en actualitzar",
+    "deleted": "Usuari eliminat",
+    "deleteFailed": "Error en eliminar",
+    "validation": {
+      "firstNameRequired": "El nom és obligatori",
+      "lastNameRequired": "El cognom és obligatori",
+      "emailInvalid": "Correu invàlid",
+      "usernameRequired": "El nom d’usuari és obligatori",
+
+      "passwordMin": "Mínim 8 caràcters",
+      "passwordUpper": "Ha de contenir majúscula",
+      "passwordLower": "Ha de contenir minúscula",
+      "passwordNumber": "Ha de contenir un número",
+      "passwordSpecial": "Ha de contenir un símbol",
+      "passwordMinShort": "Mínim 5 caràcters",
+
+      "PasswordStrong": "La contrasenya no és prou forta"
+    }
   },
   "errors": {
     "USER_EXISTS": "Aquest correu ja està registrat",

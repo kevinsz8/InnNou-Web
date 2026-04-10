@@ -3,6 +3,7 @@ import { createUser } from "@/services/userService";
 import toast from "react-hot-toast";
 import type { ApiResponse } from "@/utils/api";
 import type { CreateUserResponse } from "@/services/userService";
+import { t } from "i18next";
 
 export const useCreateUser = (onSuccess?: () => void) => {
     const [saving, setSaving] = useState(false);
@@ -25,7 +26,7 @@ export const useCreateUser = (onSuccess?: () => void) => {
                 return res;
             }
 
-            toast.success("User created 🎉");
+            toast.success(t("users.created") + " 🎉");
             onSuccess?.();
 
             return res;

@@ -13,7 +13,7 @@ import Modal from "@/components/ui/Modal";
 import PaginatedTable from "@/components/ui/PaginatedTable";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 
-import { createUserSchema, updateUserSchema } from "@/types/validation/userSchema";
+import { buildCreateUserSchema, buildUpdateUserSchema } from "@/types/validation/userSchema";
 import type { User } from "@/types/user";
 import { useGetHotels } from "../hooks/hotels/useGetHotels";
 import { useGetRoles } from "../hooks/roles/useGetRoles";
@@ -21,6 +21,8 @@ import Select from "../components/ui/Select";
 import Loader from "../components/ui/Loader";
 import toast from "react-hot-toast";
 import PasswordInput from "../components/ui/PasswordInput";
+import { useImpersonateUser } from "../hooks/users/useImpersonateUser";
+import FullScreenLoader from "../components/ui/FullScreenLoader";
 
 const Users: React.FC = () => {
     const { t } = useTranslation();
@@ -37,6 +39,7 @@ const Users: React.FC = () => {
 
     const { hotels } = useGetHotels();
     const { roles } = useGetRoles();
+    const { impersonate, loading: impersonating } = useImpersonateUser();
 
     const {
         users,
@@ -119,7 +122,9 @@ const Users: React.FC = () => {
     const handleAddUser = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const schema = mode === "create" ? createUserSchema : updateUserSchema;
+        const schema = mode === "create"
+            ? buildCreateUserSchema(t)
+            : buildUpdateUserSchema(t);
 
         
        
@@ -163,7 +168,7 @@ const Users: React.FC = () => {
             if (!isPasswordStrong(addPassword)) {
                 setFormErrors(prev => ({
                     ...prev,
-                    password: "Password is not strong enough"
+                    password: t("users.validation.PasswordStrong")
                 }));
                 return;
             }
@@ -210,7 +215,7 @@ const Users: React.FC = () => {
             if (changePassword && addPassword && !isPasswordStrong(addPassword)) {
                 setFormErrors(prev => ({
                     ...prev,
-                    password: "Password is not strong enough"
+                    password: t("users.validation.PasswordStrong")
                 }));
                 return;
             }
@@ -340,6 +345,13 @@ const Users: React.FC = () => {
                                         </Button>
                                         <Button variant="danger" onClick={() => handleDelete(user)} className="hover:scale-105 transition">
                                             {t("common.delete")}
+                                        </Button>
+                                        <Button
+                                            variant="secondary"
+                                            onClick={() => impersonate(user.userToken)}
+                                            className="hover:scale-105 transition"
+                                        >
+                                            {t("common.impersonate")}
                                         </Button>
                                     </td>
                                 </>
@@ -476,7 +488,13 @@ const Users: React.FC = () => {
                 />
 
             </div>
+            <FullScreenLoader
+                open={impersonating}
+                title="Switching user..."
+                subtitle="Applying permissions and loading context"
+            />
         </DashboardLayout>
+
     );
 };
 

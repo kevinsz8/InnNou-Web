@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { deleteUser } from "@/services/userService";
 import toast from "react-hot-toast";
+import { t } from "i18next";
 
 export const useDeleteUser = (onSuccess?: () => void) => {
     const [deleting, setDeleting] = useState(false);
@@ -12,10 +13,10 @@ export const useDeleteUser = (onSuccess?: () => void) => {
             const res = await deleteUser(userToken);
 
             if (res.success) {
-                toast.success("User deleted 🗑️");
+                toast.success(t("users.deleted") + " 🗑️");
                 onSuccess?.();
             } else {
-                toast.error(res.errors?.[0]?.description || "Delete failed");
+                toast.error(res.errors?.[0]?.description || t("users.deleteFailed"));
             }
         } finally {
             setDeleting(false);

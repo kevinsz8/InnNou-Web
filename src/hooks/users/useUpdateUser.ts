@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { updateUser } from "@/services/userService";
 import toast from "react-hot-toast";
+import { t } from "i18next";
 
 export const useUpdateUser = (onSuccess?: () => void) => {
     const [saving, setSaving] = useState(false);
@@ -14,10 +15,10 @@ export const useUpdateUser = (onSuccess?: () => void) => {
             const res = await updateUser(data);
 
             if (res.success) {
-                toast.success("User updated ✨");
+                toast.success(t("users.updated") + "✨");
                 onSuccess?.();
             } else {
-                const msg = res.errors?.[0]?.description || "Update failed";
+                const msg = res.errors?.[0]?.description || t("users.updated");
                 setError(msg);
                 toast.error(msg);
             }
