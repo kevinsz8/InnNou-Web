@@ -3,6 +3,9 @@ import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import LanguageSelector from "@/components/ui/LanguageSelector";
 import { forceLogout } from "@/utils/authSession";
+import { useAuth } from '../core/auth/authContext';
+import { useStopImpersonation } from '../hooks/users/useStopImpersonation';
+import FullScreenLoader from './ui/FullScreenLoader';
 
 const menuItems = [
     { key: 'home', icon: '🏠', path: '/dashboard' },
@@ -18,6 +21,8 @@ const menuItems = [
 const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [userMenuOpen, setUserMenuOpen] = useState(false);
+    const { isImpersonating, impersonatedEmail, actorEmail } = useAuth();
+    const { stop, loading: stopping } = useStopImpersonation();
 
     const location = useLocation();
     const { t } = useTranslation();
@@ -82,7 +87,10 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
             <div className="flex flex-col md:ml-64 transition-all">
 
                 {/* TOPBAR */}
-                <header className="h-16 bg-white border-b flex items-center justify-between px-4 md:px-8">
+                <header className={`
+                    h-16 border-b flex items-center justify-between px-4 md:px-8 gap-4
+                    ${isImpersonating ? "bg-red-50 border-red-200" : "bg-white"}
+                `}>
 
                     <button
                         onClick={() => setSidebarOpen(true)}
@@ -94,6 +102,25 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
                     <div className="font-semibold text-slate-700">
                         {t("layout.dashboard")}
                     </div>
+
+                    {/* 🔥 IMPERSONATION MODE PRO */}
+                    {isImpersonating && (
+                        <div className="flex items-center gap-2 bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
+
+                            <span className="font-medium">
+                                {actorEmail} {t("auth.Impersonated")} → {impersonatedEmail}
+                            </span>
+
+                            <button
+                                onClick={stop}
+                                disabled={stopping}
+                                className="ml-2 bg-red-500 text-white px-2 py-0.5 rounded hover:bg-red-600 text-xs disabled:opacity-50"
+                            >
+                                {stopping ? "..." : t("auth.stopImpersonated")}
+                            </button>
+
+                        </div>
+                    )}
 
                     {/* RIGHT SIDE */}
                     <div className="flex items-center gap-4 relative" ref={menuRef}>
@@ -139,7 +166,11 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
                 <main className="flex-1 p-4 md:p-8 w-full overflow-hidden">
                     {children}
                 </main>
-
+                <FullScreenLoader
+                    open={stopping}
+                    title={t("auth.SwitchUserLoaderTitle")}
+                    subtitle={t("auth.SwitchUserLoaderSubtitle")}
+                />
             </div>
         </div>
     );

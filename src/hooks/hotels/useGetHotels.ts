@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { getHotelsSimple, type Hotel } from "@/services/hotelService";
+import { getHotels } from "@/services/hotelService";
+import type { Hotel } from "../../types/hotel";
 
 export const useGetHotels = () => {
     const [hotels, setHotels] = useState<Hotel[]>([]);
@@ -9,7 +10,7 @@ export const useGetHotels = () => {
         const load = async () => {
             setLoading(true);
 
-            const res = await getHotelsSimple({
+            const res = await getHotels({
                 pageNumber: 1,
                 pageSize: 10,
             });

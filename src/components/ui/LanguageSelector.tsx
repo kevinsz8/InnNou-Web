@@ -2,9 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import i18n from "i18next";
 
 const languages = [
-    { code: "en", label: "English", short: "EN", flag: "🇬🇧" },
-    { code: "es", label: "Español", short: "ES", flag: "🇪🇸" },
-    { code: "ca", label: "Català", short: "CA", flag: "🇦🇩" }
+    { code: "en", label: "English", short: "EN", flag: "/flags/us.svg" },
+    { code: "es", label: "Español", short: "ES", flag: "/flags/es.svg" },
+    { code: "ca", label: "Català", short: "CA", flag: "/flags/cat.svg" }
 ];
 
 const LanguageSelector = () => {
@@ -39,7 +39,12 @@ const LanguageSelector = () => {
                 onClick={() => setOpen(prev => !prev)}
                 className="flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm font-medium"
             >
-                <span>{current.flag}</span>
+                <span>
+                    <img
+                        src={current.flag}
+                        alt={current.label}
+                        className="w-5 h-5 object-cover rounded-sm"
+                    /></span>
                 <span>{current.short}</span>
                 <span className="text-xs">▼</span>
             </button>
@@ -57,7 +62,11 @@ const LanguageSelector = () => {
                                 ${current.code === lang.code ? "bg-slate-100 font-semibold" : ""}
                             `}
                         >
-                            <span>{lang.flag}</span>
+                            <img
+                                src={lang.flag}
+                                alt={lang.label}
+                                className="w-5 h-5 object-cover rounded-sm"
+                            />
                             <span>{lang.label}</span>
                         </button>
                     ))}

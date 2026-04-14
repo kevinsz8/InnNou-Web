@@ -5,7 +5,11 @@
     "welcomeBack": "¡Bienvenido! Ingresa tus credenciales.",
     "email": "Correo",
     "password": "Contraseña",
-    "login": "Entrar"
+    "login": "Entrar",
+    "Impersonated": " esta suplantando: ",
+    "stopImpersonated": "Volver a mi sesión",
+    "SwitchUserLoaderTitle": "Cambio de usuario...",
+    "SwitchUserLoaderSubtitle": "Aplicando permisos y cargando contexto"
   },
   "layout": {
     "dashboard": "Dashboard",
@@ -14,9 +18,7 @@
     "logout": "Cerrar sesión",
     "role": "Rol",
     "hotel": "Hotel",
-    "switchHotel": "Cambiar hotel",
-    "impersonating": "Suplantando usuario",
-    "returnToOwnSession": "Volver a mi sesión"
+    "switchHotel": "Cambiar hotel"
   },
   "menu": {
     "home": "Inicio",

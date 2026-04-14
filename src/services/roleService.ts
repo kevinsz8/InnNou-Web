@@ -1,10 +1,6 @@
 import { apiCall } from "@/utils/api";
 import type { ApiResponse } from "@/utils/api";
-
-export interface Role {
-    roleId: number;
-    name: string;
-}
+import type { Role } from "../types/role";
 
 export interface GetRolesRequest {
     pageNumber: number;

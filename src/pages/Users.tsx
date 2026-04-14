@@ -490,8 +490,8 @@ const Users: React.FC = () => {
             </div>
             <FullScreenLoader
                 open={impersonating}
-                title="Switching user..."
-                subtitle="Applying permissions and loading context"
+                title={t("auth.SwitchUserLoaderTitle")}
+                subtitle={t("auth.SwitchUserLoaderSubtitle")}
             />
         </DashboardLayout>
 

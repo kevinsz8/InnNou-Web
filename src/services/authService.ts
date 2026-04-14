@@ -50,3 +50,9 @@ export async function impersonateUser(
         body: data
     });
 }
+
+export async function stopImpersonation(): Promise<ApiResponse<LoginResponse>> {
+    return apiCall<LoginResponse>(`${BASE_URL}/stop-impersonate`, {
+        method: "POST"
+    });
+}

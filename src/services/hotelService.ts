@@ -1,10 +1,8 @@
 import { apiCall } from "@/utils/api";
 import type { ApiResponse } from "@/utils/api";
+import type { Hotel } from "../types/hotel";
 
-export interface Hotel {
-    hotelId: number;
-    name: string;
-}
+
 
 export interface GetHotelsResponse {
     hotels: Hotel[];
@@ -21,11 +19,13 @@ export interface GetHotelsResponse {
 export interface GetHotelsRequest {
     pageNumber: number;
     pageSize: number;
+    searchField?: string;
+    searchText?: string;
 }
 
 const BASE_URL = "https://localhost:7279/hotels";
 
-export async function getHotelsSimple(request: GetHotelsRequest): Promise<ApiResponse<GetHotelsResponse>> {
+export async function getHotels(request: GetHotelsRequest): Promise<ApiResponse<GetHotelsResponse>> {
     return apiCall<GetHotelsResponse>(`${BASE_URL}/getHotels`, {
         method: "POST",
         errorMode: "silent",

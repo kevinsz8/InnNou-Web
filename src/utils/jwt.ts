@@ -1,11 +1,14 @@
+import { jwtDecode } from "jwt-decode";
+
 export interface JwtPayload {
-    sub?: string;
-    email?: string;
-    roleLevel?: string | number;
-    hotelId?: string | number;
+    sub: string;
+    email: string;
+    roleLevel: string;
+    hotelId?: string;
     impersonatedUserToken?: string;
-    exp?: number;
-    iat?: number;
+    actorRoleLevel?: string;
+    actorHotelId?: string;
+    impersonatedEmail: string;
 }
 
 export interface AuthUser {
@@ -17,28 +20,18 @@ export interface AuthUser {
     isImpersonating: boolean;
 }
 
-const parseBase64Url = (value: string) => {
-    const base64 = value.replace(/-/g, "+").replace(/_/g, "/");
-    const padded = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), "=");
-    return atob(padded);
-};
-
-export const decodeJwt = (token: string): JwtPayload | null => {
+export function decodeToken(token: string): JwtPayload | null {
     try {
-        const parts = token.split(".");
-        if (parts.length !== 3) return null;
-
-        const payload = parseBase64Url(parts[1]);
-        return JSON.parse(payload) as JwtPayload;
+        return jwtDecode<JwtPayload>(token);
     } catch {
         return null;
     }
-};
+}
 
 export const getAuthUserFromToken = (token: string | null): AuthUser | null => {
     if (!token) return null;
 
-    const payload = decodeJwt(token);
+    const payload = decodeToken(token);
     if (!payload) return null;
 
     const actorUserToken = payload.sub ?? null;

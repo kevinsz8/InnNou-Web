@@ -5,7 +5,11 @@
     "welcomeBack": "Welcome back! Please enter your credentials.",
     "email": "Email",
     "password": "Password",
-    "login": "Login"
+    "login": "Login",
+    "Impersonated": " is impersonating ",
+    "stopImpersonated": "Return to my session",
+    "SwitchUserLoaderTitle": "Switching user...",
+    "SwitchUserLoaderSubtitle": "Applying permissions and loading context"
   },
   "layout": {
     "dashboard": "Dashboard",
@@ -14,9 +18,7 @@
     "logout": "Logout",
     "role": "Role",
     "hotel": "Hotel",
-    "switchHotel": "Switch hotel",
-    "impersonating": "Impersonating user",
-    "returnToOwnSession": "Return to my session"
+    "switchHotel": "Switch hotel"
   },
   "menu": {
     "home": "Home",
