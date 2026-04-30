@@ -28,7 +28,8 @@
     "prices": "Prices",
     "users": "Users",
     "sales": "Sales",
-    "inventory": "Inventory"
+    "inventory": "Inventory",
+    "hotels": "Hotels"
   },
   "common": {
     "save": "Save",
@@ -77,5 +78,9 @@
   "errors": {
     "USER_ALREADY_EXISTS": "This email is already registered",
     "USER_CREATION_FAILED": "Username already exists"
+  },
+  "hotels": {
+    "nameHotel": "Hotel Name",
+    "addHotel": "Add hotel"
   }
 }

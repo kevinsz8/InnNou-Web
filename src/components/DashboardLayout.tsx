@@ -13,6 +13,7 @@ const menuItems = [
     { key: 'providers', icon: '🏢', path: '/providers' },
     { key: 'articles', icon: '📦', path: '/articles' },
     { key: 'prices', icon: '💲', path: '/prices' },
+    { key: 'hotels', icon: '🏠', path: '/hotels' },
     { key: 'users', icon: '👤', path: '/users' },
     { key: 'sales', icon: '🛒', path: '/sales' },
     { key: 'inventory', icon: '📊', path: '/inventory' },

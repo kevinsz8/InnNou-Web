@@ -3,6 +3,7 @@ import Login from '@/pages/Login';
 import Dashboard from '@/pages/Dashboard';
 import Users from '@/pages/Users';
 import PrivateRoute from '../core/auth/PrivateRoute';
+import Hotels from '../pages/Hotels';
 
 export const appRoutes = [
     {
@@ -24,5 +25,13 @@ export const appRoutes = [
         <Users />
       </PrivateRoute>
     ),
-  },
+    },
+    {
+        path: '/hotels',
+        element: (
+            <PrivateRoute>
+                <Hotels />
+            </PrivateRoute>
+        ),
+    },
 ];
